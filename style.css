@@ -1,0 +1,12 @@
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+main#tela {
+    height: 1080px;
+    width: 1920px;
+    background-color: blue;
+}
+

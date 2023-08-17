@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>MyPC</title>
+</head>
+<body>
+    <main id="tela">
+        <p>Ola</p>
+    </main>
+    <script>
+        
+        
+    </script>
+    <script type="module">
+        let alteration = false
+        let x_position = 0
+        let y_position = 0
+        let clicked = -1
+        let keypressed = []
+        let keydespressed = []
+        let ctrpressed = false
+        let altpressed = false
+        let shiftpressed = false
+        let metapressed = false
+        
+        document.getElementsByTagName('body')[0].addEventListener('keydown', (event) => {
+            alteration = true
+            var key = true
+            for (var i in keypressed) {
+                console.log(i)
+                if (event.key == keypressed[i]) {
+                    if (keydespressed[i] = keypressed[i]){
+                        keydespressed.splice(i-1, 1)
+                    }
+                    key = false
+                }
+            }
+            if (key) {
+                keypressed.push(event.key)
+            }
+            ctrpressed = event.ctrlKey
+            altpressed = event.altKey
+            shiftpressed = event.shiftKey
+            altpressed = event.altKey
+            shiftpressed = event.shiftKey
+            metapressed = event.metaKey
+        })
+        
+        document.getElementsByTagName('body')[0].addEventListener('keyup', (event) => {
+            alteration = true
+            var key = true
+            for (var i in keydespressed) {
+                console.log(i)
+                if (event.key == keypressed[i]) {
+                    key = false
+                }
+            }
+            if (key) {
+                keydespressed.push(event.key)
+                keypressed.splice(i-1, 1)
+            }
+            ctrpressed = event.ctrlKey
+            altpressed = event.altKey
+            shiftpressed = event.shiftKey
+            altpressed = event.altKey
+            shiftpressed = event.shiftKey
+            metapressed = event.metaKey
+        })
+        
+        document.getElementById('tela').addEventListener('mousemove', (event) => {
+            alteration = true
+            x_position = event.clientX
+            y_position = event.clientY
+        })
+        
+        document.getElementById('tela').addEventListener('mousedown', (event) => {
+            alteration = true
+            clicked = event.button
+        })
+        
+        document.getElementById('tela').addEventListener('mouseup', (event) => {
+            alteration = true
+            clicked = -1
+        })
+        import { initializeApp} from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js"
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js"
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyAmlVpRV9N1UB_U2O-9St1VrmVo6ENHQYc",
+            authDomain: "mypc-8fddf.firebaseapp.com",
+            projectId: "mypc-8fddf",
+            storageBucket: "mypc-8fddf.appspot.com",
+            messagingSenderId: "384531643573",
+            appId: "1:384531643573:web:1e8a9c76be757f2654d2fc",
+            measurementId: "G-0LW4WEZKZC",
+            databaseURL: "https://mypc-8fddf-default-rtdb.europe-west1.firebasedatabase.app"
+        }
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig)
+        const analytics = getAnalytics(app)
+        
+        function SendAlteration() {
+            const db = getDatabase();
+            set(ref(db, '/'), {
+                x_position: x_position,
+                y_position: y_position,
+                clicked: clicked,
+                keypressed: keypressed,
+                keydespressed: keydespressed,
+                ctrpressed: ctrpressed,
+                altpressed: altpressed,
+                shiftpressed: shiftpressed,
+                metapressed: metapressed
+            });
+        }
+        
+        var intervalo = setInterval(async function() {
+            if (alteration) {
+                SendAlteration()
+                alteration = false
+            }
+        }, 100);
+    </script>
+</body>
+</html>
