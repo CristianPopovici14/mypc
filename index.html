@@ -83,8 +83,8 @@
         })
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js"
-        import { getDatabase, set } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js"
-        import { getStorage, ref, getDownloadURL } from"https://www.gstatic.com/firebasejs/10.1.0/firebase-storage.js"
+        import { getDatabase,ref, set } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js"
+        //import { getStorage, ref, getDownloadURL } from"https://www.gstatic.com/firebasejs/10.1.0/firebase-storage.js"
         
         const firebaseConfig = {
             apiKey: "AIzaSyAmlVpRV9N1UB_U2O-9St1VrmVo6ENHQYc",
@@ -100,21 +100,21 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig)
         const analytics = getAnalytics(app)
-        const storage = getStorage();
+        //const storage = getStorage();
         
         
-        getDownloadURL(ref(storage, 'gs://mypc-8fddf.appspot.com/Reatime/screenshot.png'))
-        .then((url) => {
-            const img = document.getElementById('screen');
-            img.setAttribute('src', url);
-        })
-        .catch((error) => {
-            // Handle any errors
-        });
+        //getDownloadURL(ref(storage, 'gs://mypc-8fddf.appspot.com/Reatime/screenshot.png'))
+        //.then((url) => {
+        //    const img = document.getElementById('screen');
+        //    img.setAttribute('src', url);
+        //})
+        //.catch((error) => {
+        //    // Handle any errors
+        //});
 
-        getDownloadURL("https://firebasestorage.googleapis.com/v0/b/mypc-8fddf.appspot.com/o/Reatime%2Fscreenshot.png?alt=media&token=96ebe41d-84c0-4e00-95f8-c8b17f8e6538")
+        //getDownloadURL("https://firebasestorage.googleapis.com/v0/b/mypc-8fddf.appspot.com/o/Reatime%2Fscreenshot.png?alt=media&token=96ebe41d-84c0-4e00-95f8-c8b17f8e6538")
         
-        
+        const img = document.getElementById('screen')
         
         function SendAlteration() {
             const db = getDatabase();
@@ -132,9 +132,9 @@
         }
         
         var intervalo = setInterval(async function() {
+            img.src = "https://firebasestorage.googleapis.com/v0/b/mypc-8fddf.appspot.com/o/Reatime%2Fscreenshot2.png?alt=media&token=7fecaccc-2ece-433a-82f1-4d38772cf96f"  
             if (alteration) {
                 SendAlteration()
-                getDownloadURL("https://firebasestorage.googleapis.com/v0/b/mypc-8fddf.appspot.com/o/Reatime%2Fscreenshot.png?alt=media&token=96ebe41d-84c0-4e00-95f8-c8b17f8e6538")
                 alteration = false
             }
         }, 100);
