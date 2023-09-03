@@ -8,7 +8,7 @@
 </head>
 <body>
     <main id="tela">
-        <img id="screen" src="" alt="">
+        <img id="imagemExibicao" src="" alt="Imagem Exibição">
     </main>
     <script type="module">
         let alteration = false
@@ -83,8 +83,8 @@
         })
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js"
-        import { getDatabase,ref, set } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js"
-        //import { getStorage, ref, getDownloadURL } from"https://www.gstatic.com/firebasejs/10.1.0/firebase-storage.js"
+        import { getDatabase, ref, set, child, get } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js"
+        
         
         const firebaseConfig = {
             apiKey: "AIzaSyAmlVpRV9N1UB_U2O-9St1VrmVo6ENHQYc",
@@ -100,25 +100,12 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig)
         const analytics = getAnalytics(app)
-        //const storage = getStorage();
-        
-        
-        //getDownloadURL(ref(storage, 'gs://mypc-8fddf.appspot.com/Reatime/screenshot.png'))
-        //.then((url) => {
-        //    const img = document.getElementById('screen');
-        //    img.setAttribute('src', url);
-        //})
-        //.catch((error) => {
-        //    // Handle any errors
-        //});
-
-        //getDownloadURL("https://firebasestorage.googleapis.com/v0/b/mypc-8fddf.appspot.com/o/Reatime%2Fscreenshot.png?alt=media&token=96ebe41d-84c0-4e00-95f8-c8b17f8e6538")
-        
+        const db = getDatabase()
         const img = document.getElementById('screen')
         
         function SendAlteration() {
-            const db = getDatabase();
-            set(ref(db, '/'), {
+            set(ref(db, '/configurations'), {
+                
                 x_position: x_position,
                 y_position: y_position,
                 clicked: clicked,
@@ -128,16 +115,30 @@
                 altpressed: altpressed,
                 shiftpressed: shiftpressed,
                 metapressed: metapressed
+            }
+            );
+        }
+        function Ver() {
+            get(ref(db, '/screenshot')).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const imagemBase64 = snapshot.val()["text"]
+                    const imagemElement = document.getElementById('imagemExibicao');
+                    var coisa = 'data:image/png;base64,' + imagemBase64
+                    imagemElement.src = coisa
+                    
+                } else {
+                    console.log("No data available");
+                }
+            }).catch((error) => {
+                console.error(error);
             });
         }
-        
-        var intervalo = setInterval(async function() {
-            img.src = "https://firebasestorage.googleapis.com/v0/b/mypc-8fddf.appspot.com/o/Reatime%2Fscreenshot.png?alt=media&token=97efbca8-2770-4fb3-ab25-07cfbd19e6d1"  
-            if (alteration) {
-                SendAlteration()
-                alteration = false
-            }
-        }, 100);
-    </script>
+        var intervalo = setInterval(async function() {if (alteration) {
+            SendAlteration()
+            alteration = false
+        }
+        Ver()
+    }, 100);
+</script>
 </body>
 </html>
